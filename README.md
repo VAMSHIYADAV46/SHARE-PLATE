@@ -115,7 +115,7 @@ This project is licensed under the **MIT License**. Feel free to modify and use 
 
 For any inquiries, suggestions, or feedback, please reach out:
 
-- **Email:** [your-email@example.com](mekalavamshiyadav46@gmail.com)
+- **Email:** [mekalavamshiyadav46@gmail.com](mailto:mekalavamshiyadav46@gmail.com)
 - **GitHub:** [GitHub Profile](https://github.com/VAMSHIYADAV46)
 
 ---
