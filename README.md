@@ -1,8 +1,5 @@
 
 
----
-
-```md
 # 🍽️ Share Plate — Connect Food Donors and Receivers
 
 **Share Plate** is a platform created to reduce food wastage by connecting food donors with people or organizations in need. It empowers individuals, restaurants, and other establishments to donate surplus food to those who can use it. 🌍💚
