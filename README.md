@@ -1,4 +1,4 @@
-Here’s the updated `README.md` file without the **Mobile-Friendly** feature and the table format for the technologies section:
+
 
 ---
 
@@ -124,7 +124,3 @@ For any inquiries, suggestions, or feedback, please reach out:
 
 **Share Plate** is made with a strong belief in reducing food waste and creating a positive impact on society. Join us on this journey to make the world a better place — one plate at a time.
 
----
-```
-
-This version maintains a clean format while effectively conveying all essential information about **Share Plate**. If you have any other changes or additions, just let me know!
