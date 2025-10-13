@@ -116,7 +116,7 @@
     var name = document.getElementById('loginName').value;
     var password = document.getElementById('loginPassword').value;
     
-
+    
     const response = await fetch(`http://localhost:8888/GetUser?username=${name}&password=${password}`);
     const data = await response.json();
     if (data.length === 0) {
