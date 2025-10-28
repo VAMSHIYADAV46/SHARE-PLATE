@@ -335,10 +335,10 @@ share-plate/
 ├── .env.example
 └── README.md
 ```
-
+<!--
 ### **Screenshots**
 
-<table>
+ <table> 
 <tr>
 <td width="50%">
 
@@ -382,7 +382,7 @@ share-plate/
 </td>
 </tr>
 </table>
-
+-->
 ---
 
 ## 🔑 **Key Features Explained**
