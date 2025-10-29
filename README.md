@@ -648,7 +648,7 @@ We believe in the power of community! Join us in fighting food waste and hunger.
 
 1. **Fork the Repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/share-plate.git
+   git clone https://github.com/VAMSHIYADAV46/share-plate.git
    cd share-plate
    ```
 
