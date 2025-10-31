@@ -427,20 +427,29 @@ function findBestMatches(donation, receivers) {
 ### **🔔 Real-Time Notification System**
 
 ```javascript
-// WebSocket notification example
-io.on('connection', (socket) => {
-  socket.on('newDonation', (data) => {
-    // Notify all nearby receivers
+// Nodemailer notification example
+const nodemailer = require("nodemailer");
+
+io.on("connection", (socket) => {
+  socket.on("newDonation", async (data) => {
     const nearbyReceivers = findNearbyUsers(data.location);
-    nearbyReceivers.forEach(receiver => {
-      io.to(receiver.socketId).emit('donationAlert', {
-        donationId: data.id,
-        foodType: data.foodType,
-        distance: calculateDistance(data.location, receiver.location)
+
+    nearbyReceivers.forEach(async (receiver) => {
+      await transporter.sendMail({
+        from: EMAIL_USER,
+        to: receiver.email,
+        subject: "⚠ New Food Donation Available Near You",
+        html: `
+          <h2>New Donation Alert 🚨</h2>
+          <p>Food Type: <b>${data.foodType}</b></p>
+          <p>Distance: <b>${calculateDistance(data.location, receiver.location)} km</b></p>
+          <p><a href="https://yourapp.com/donation/${data.id}">Click here to view donation</a></p>
+        `,
       });
     });
   });
 });
+
 ```
 
 **Notification Types:**
