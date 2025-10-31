@@ -130,7 +130,7 @@ graph TB
 | **ODM** | ![Mongoose](https://img.shields.io/badge/Mongoose-880000?logo=mongodb&logoColor=white) | MongoDB object modeling |
 | **Maps** | ![Google Maps](https://img.shields.io/badge/Google_Maps-4285F4?logo=google-maps&logoColor=white) | Location services and mapping |
 | **Authentication** | ![JWT](https://img.shields.io/badge/JWT-000000?logo=json-web-tokens&logoColor=white) | Secure token-based authentication |
-| **Notifications** | ![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?logo=socket.io&logoColor=white) | Real-time bidirectional communication |
+| **Notifications** | ![Nodemailer](https://img.shields.io/badge/Nodemailer-2B6C2B?logo=maildotru&logoColor=white) | Email notifications using Nodemailer |
 
 ---
 
