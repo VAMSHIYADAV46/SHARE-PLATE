@@ -32,7 +32,6 @@ Every year, billions of tons of food are wasted globally while millions go hungr
 Share Plate bridges this gap with a modern, technology-driven platform that makes food donation as simple as a few clicks. Whether you're a restaurant with excess inventory, a household with surplus groceries, or an organization hosting events, you can instantly connect with verified receivers in your community.
 
 ### 🚀 **What Makes Share Plate Unique**
-- **⚡ Real-Time Matching** - Instant connections between donors and receivers
 - **📍 Location-Based** - Smart geographic matching using Google Maps API
 - **🔔 Push Notifications** - Immediate alerts for new donations
 - **🌱 Sustainability Focused** - Track your impact on reducing food waste
@@ -49,7 +48,6 @@ Share Plate bridges this gap with a modern, technology-driven platform that make
 
 ### 🎬 **Core Features**
 - 🎁 **Dual Registration** - Easy sign-up for donors & receivers
-- 📍 **Smart Matching** - Real-time location-based connections
 - 🍲 **Donation Listings** - Detailed food descriptions with expiry info
 - 🔔 **Instant Alerts** - Push notifications for new donations
 - 🗺️ **Interactive Maps** - Visual location tracking
@@ -314,8 +312,7 @@ share-plate/
 │   └── errorHandler.js      # Error handling
 ├── utils/
 │   ├── geocoding.js         # Google Maps integration
-│   ├── notifications.js     # Push notification service
-│   └── matching.js          # Donor-receiver matching algorithm
+│   └──  notifications.js     # Push notification service
 ├── public/
 │   ├── css/
 │   │   └── styles.css
@@ -387,42 +384,6 @@ share-plate/
 
 ## 🔑 **Key Features Explained**
 
-### **📍 Real-Time Matching Algorithm**
-
-Our intelligent matching system considers multiple factors:
-
-```javascript
-// Matching algorithm pseudocode
-function findBestMatches(donation, receivers) {
-  return receivers
-    .filter(receiver => {
-      // Distance-based filtering
-      const distance = calculateDistance(
-        donation.location, 
-        receiver.location
-      );
-      return distance <= MAX_DISTANCE;
-    })
-    .filter(receiver => {
-      // Dietary preferences matching
-      return matchesDietaryNeeds(
-        donation.foodType, 
-        receiver.preferences
-      );
-    })
-    .sort((a, b) => {
-      // Priority-based sorting
-      return b.priority - a.priority;
-    });
-}
-```
-
-**Factors Considered:**
-- Geographic proximity (using Haversine formula)
-- Food type and dietary preferences
-- Receiver priority (families, NGOs, individuals)
-- Expiration urgency
-- Historical reliability ratings
 
 ### **🔔 Real-Time Notification System**
 
@@ -547,7 +508,6 @@ function initMap() {
 
 - ✅ **Geographic Data** - Working with coordinates and location-based queries
 - ✅ **Real-Time Systems** - Socket.IO for instant updates
-- ✅ **Matching Algorithms** - Complex sorting and filtering logic
 - ✅ **User Authentication** - JWT-based secure authentication
 - ✅ **Database Design** - Efficient schema for relational data
 - ✅ **External APIs** - Google Maps integration
