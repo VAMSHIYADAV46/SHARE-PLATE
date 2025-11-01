@@ -427,28 +427,46 @@ function findBestMatches(donation, receivers) {
 ### **🔔 Real-Time Notification System**
 
 ```javascript
-// Nodemailer notification example
 const nodemailer = require("nodemailer");
+const { fetchEmails } = require("./database");
 
-io.on("connection", (socket) => {
-  socket.on("newDonation", async (data) => {
-    const nearbyReceivers = findNearbyUsers(data.location);
-
-    nearbyReceivers.forEach(async (receiver) => {
-      await transporter.sendMail({
-        from: EMAIL_USER,
-        to: receiver.email,
-        subject: "⚠ New Food Donation Available Near You",
-        html: `
-          <h2>New Donation Alert 🚨</h2>
-          <p>Food Type: <b>${data.foodType}</b></p>
-          <p>Distance: <b>${calculateDistance(data.location, receiver.location)} km</b></p>
-          <p><a href="https://yourapp.com/donation/${data.id}">Click here to view donation</a></p>
-        `,
-      });
-    });
-  });
+// Create Gmail transporter (using App Password)
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
 });
+
+// Fetch user emails from DB
+async function getEmails() {
+  return await fetchEmails();
+}
+
+// Email body (customized for donation info)
+function donationMessage(donation) {
+  return `
+Hello there!
+
+A generous donor just uploaded fresh food on SharePlate:
+
+- Food Item: ${donation.foodName}
+- Quantity: ${donation.quantity}
+- Freshness: ${donation.freshTime}
+- Location: ${donation.location}
+- Other Details: ${donation.otherDetails || "N/A"}
+
+Food is available on a first-come, first-served basis —
+Join the mission to reduce food waste and help the community!
+
+Best regards,
+Team SharePlate 🤝
+`;
+}
+
+module.exports = { transporter, getEmails, donationMessage };
+
 
 ```
 
