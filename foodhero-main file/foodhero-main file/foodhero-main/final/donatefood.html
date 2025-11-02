@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -177,6 +177,388 @@
       const mobileNumber = document.getElementById('mobileNumber').value;
       const otherDetails = document.getElementById('otherDetails').value;
 
+
+      try {
+        const response = await fetch('http://localhost:8888/storedonations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ foodName, quantity, freshTime, location, mobileNumber, otherDetails})
+        });
+
+        const data = await response.text();
+        console.log(data); // Log the response from the server
+      } catch (error) {
+        console.error(error);
+      }
+
+      window.location.href = 'home.html';
+    });
+  </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Food Donation Form</title>
+
+  <!-- Leaflet (kept exactly to preserve functionality) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    /* Introduce design tokens and modernized UI while preserving all IDs and JS behavior */
+    :root {
+      --color-primary: #ffb411; /* brand */
+      --color-fg: #0f172a;      /* near-black */
+      --color-bg: #f8fafc;      /* light background */
+      --color-card: #ffffff;    /* surfaces */
+      --color-border: #e5e7eb;  /* subtle borders */
+      --color-muted: #64748b;   /* secondary text */
+      --radius: 12px;
+      --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+      --shadow-md: 0 6px 20px rgba(16, 24, 40, 0.08);
+      --focus: 0 0 0 3px rgba(255, 180, 17, 0.35);
+    }
+
+    /* Base reset */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--color-fg);
+      background: var(--color-bg);
+      line-height: 1.55;
+    }
+
+    /* Page wrapper */
+    .page {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* Card */
+    .main {
+      width: 100%;
+      max-width: 720px;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 20px 24px;
+      background: #fff;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-fg);
+      letter-spacing: 0.3px;
+    }
+    .title .brand {
+      color: var(--color-primary);
+    }
+
+    .signup {
+      padding: 24px;
+    }
+
+    /* Form layout */
+    .signup form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-fg);
+    }
+
+    .food_type { color: var(--color-fg); } /* keep class to respect existing structure */
+
+    input[type="text"],
+    input[type="number"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--color-border);
+      background: #fff;
+      color: var(--color-fg);
+      padding: 10px 12px;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: var(--shadow-sm);
+    }
+    textarea { resize: vertical; min-height: 110px; }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--color-primary);
+      box-shadow: var(--focus);
+    }
+
+    /* Inline banner (kept original label text, styled as a chip) */
+    .banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 180, 17, 0.12);
+      color: var(--color-primary);
+      border: 1px solid rgba(255, 180, 17, 0.35);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.2px;
+    }
+
+    /* Buttons */
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: transform 0.03s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+
+    /* Primary (Submit) */
+    #submitButton {
+      background: var(--color-primary);
+      color: #111827; /* ensure contrast on warm yellow */
+      box-shadow: var(--shadow-sm);
+    }
+    #submitButton:hover {
+      filter: saturate(1.05) brightness(0.98);
+      transform: translateY(-1px);
+    }
+    #submitButton:active { transform: translateY(0); }
+
+    /* Secondary (My Location) — keep onclick selector intact */
+    button[onclick="showMap()"] {
+      background: #fff;
+      color: var(--color-fg);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+    button[onclick="showMap()"]:hover {
+      background: #f9fafb;
+      transform: translateY(-1px);
+    }
+    button[onclick="showMap()"]:active { transform: translateY(0); }
+
+    /* Map modal overlay */
+    #map-container {
+      display: none;            /* JS toggles this */
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 9999;
+      padding: 24px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Center content with flex when visible (style attribute sets display:block; JS will show; we leverage flex via !important) */
+    #map-container[style*="block"] {
+      display: flex !important;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #map {
+      width: min(900px, 90vw);
+      height: min(70vh, 560px);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--color-border);
+      background: #fff;
+    }
+
+    #close-button {
+      text-align: center;
+    }
+    #close-button > button {
+      background: #fff;
+      color: var(--color-fg);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+      padding: 10px 16px;
+    }
+    #close-button > button:hover {
+      background: #f9fafb;
+      transform: translateY(-1px);
+    }
+
+    /* Small helpers */
+    .help {
+      font-size: 12px;
+      color: var(--color-muted);
+    }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+      .form-row.two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="main">
+      <header>
+        <h1 class="title"><span class="brand">Food</span> Donation Form</h1>
+      </header>
+
+      <div class="signup">
+        <form>
+          <!-- Keep original banner text as a label to avoid changing functionality -->
+          <div class="form-group">
+            <span class="banner">FOOD DONATING INTERFACE</span>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="food_type" class="food_type">Type of Food</label>
+              <select name="food_type" id="food_type">
+                <option value="cardtype" selected disabled>Select any one</option>
+                <option value="Veg">Veg</option>
+                <option value="Non-Veg">Non-Veg</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="food_name" class="food_type">Name of food item</label>
+              <input type="text" name="food_name" id="foodName" placeholder="Enter food item" required />
+            </div>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="quantity" class="food_type">Quantity</label>
+              <input type="text" name="quantity" id="quantity" placeholder="Enter quantity" required />
+            </div>
+
+            <div class="form-group">
+              <label for="fresh_time" class="food_type">Fresh Up To</label>
+              <input type="time" name="fresh_time" id="freshTime" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="food_type">Location</label>
+            <div class="actions">
+              <!-- Keep exact selector for JS: button[onclick="showMap()"] -->
+              <button onclick="showMap()">My Location</button>
+              <span class="help">Click and drag the map to set your approximate location.</span>
+            </div>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="mobile" class="food_type">Your Mobile Number</label>
+              <input type="number" name="mobile" id="mobileNumber" placeholder="Enter your mobile number" required />
+            </div>
+
+            <div class="form-group">
+              <label for="details" class="food_type">Any Other Details</label>
+              <textarea name="details" cols="30" rows="5" placeholder="Enter any other details" id="otherDetails"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <!-- Keep same id for JS submit handler -->
+            <button id="submitButton">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map overlay (IDs unchanged) -->
+  <div id="map-container">
+    <div id="map"></div>
+    <div id="close-button">
+      <button onclick="closeMap()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    var map;
+    let a;
+    let b;
+
+    function initMap() {
+      map = L.map('map').setView([51.505, -0.09], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+    }
+
+    function showMap() {
+      document.getElementById('map-container').style.display = 'block';
+      initMap();
+    }
+
+    function closeMap() {
+      document.getElementById('map-container').style.display = 'none';
+      var center = map.getCenter();
+      console.log('Coordinates:', center.lat, center.lng);
+
+      a = center.lat;
+      b = center.lng;
+      // You can replace "My Location" text with the location name in your UI here
+      document.querySelector('button[onclick="showMap()"]').innerText = 'Location: ' + center.lat + ', ' + center.lng;
+    }
+
+    document.getElementById('submitButton').addEventListener('click', async function(event) {
+      event.preventDefault();
+      // Get values from input fields
+      const foodName = document.getElementById('foodName').value;
+      const quantity = document.getElementById('quantity').value;
+      const freshTime = document.getElementById('freshTime').value;
+      const location = [a, b];
+      const mobileNumber = document.getElementById('mobileNumber').value;
+      const otherDetails = document.getElementById('otherDetails').value;
 
       try {
         const response = await fetch('http://localhost:8888/storedonations', {

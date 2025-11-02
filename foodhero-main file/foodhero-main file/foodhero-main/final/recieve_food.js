@@ -7,11 +7,17 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
+// Create a layer group to manage markers
+let markerGroup = L.layerGroup().addTo(map);
+
 // Function to perform search
 async function performSearch() {
   const searchInput = document.getElementById("searchInput").value.trim().toLowerCase();
   const searchResults = document.getElementById("searchResults");
   searchResults.innerHTML = "";
+
+  // Clear old markers from map before showing new ones
+  markerGroup.clearLayers();
 
   try {
     const response = await fetch(`http://localhost:8888/fetchdonations?foodname=${searchInput}`);
@@ -21,6 +27,8 @@ async function performSearch() {
     const filteredResults = await response.json();
 
     if (filteredResults.length > 0) {
+      const bounds = []; // to fit all markers in view
+
       filteredResults.forEach((result) => {
         const listItem = document.createElement("div");
         listItem.textContent = result.Location;
@@ -35,8 +43,8 @@ async function performSearch() {
           latLng = result.Location;
         }
 
-        if (latLng) {
-          const marker = L.marker(latLng).addTo(map);
+        if (latLng && !isNaN(latLng[0]) && !isNaN(latLng[1])) {
+          const marker = L.marker(latLng).addTo(markerGroup);
 
           marker.on("click", () => {
             redirectToDetails(result);
@@ -45,10 +53,17 @@ async function performSearch() {
           listItem.addEventListener("click", () => {
             redirectToDetails(result);
           });
+
+          bounds.push(latLng);
         }
 
         searchResults.appendChild(listItem);
       });
+
+      // Fit map view to show all markers nicely
+      if (bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
     } else {
       const noResultsMessage = document.createElement("div");
       noResultsMessage.textContent = "No results found.";
