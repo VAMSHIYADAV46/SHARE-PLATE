@@ -106,6 +106,33 @@ async function fetchUser(user) {
 
 
 
+async function fetchUserByUserName(userCredentials) {
+    try {
+        console.log("fetchUserByUserName called with:", JSON.stringify(userCredentials));
+        
+        if (!userCredentials || !userCredentials.userName) {
+            console.error("Invalid userCredentials object or missing userName property");
+            return null;
+        }
+        
+        const userCollection = await getUsersCollection();
+        console.log("Searching for user with userName:", userCredentials.userName);
+        
+        const result = await userCollection.findOne({ userName: userCredentials.userName });
+        console.log("Fetching user by userName from method fetchUserByUserName");
+        console.log("Result:", result ? "User found" : "User not found (null)");
+        
+        return result;
+    } catch (error) {
+        console.error("Error fetching user", error.message);
+        throw error;
+    }
+}
+
+
+
+
+
 
 
 
@@ -124,5 +151,6 @@ module.exports = {
     fetchDonationsByFoodName,
     fetchAllDonations,
     storeUser,
-    fetchUser
+    fetchUser,
+    fetchUserByUserName
 };
