@@ -89,3 +89,8 @@ function redirectToDetails(result) {
 
 // Add event listener for search button
 document.getElementById("searchButton").addEventListener("click", performSearch);
+
+
+
+// Load all donations when page loads
+document.addEventListener('DOMContentLoaded', fetchAllDonations);
