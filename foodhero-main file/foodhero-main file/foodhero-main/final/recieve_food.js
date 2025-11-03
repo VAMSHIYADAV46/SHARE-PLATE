@@ -94,3 +94,5 @@ document.getElementById("searchButton").addEventListener("click", performSearch)
 
 // Load all donations when page loads
 document.addEventListener('DOMContentLoaded', fetchAllDonations);
+
+document.getElementById("searchButton").onclick = search;
