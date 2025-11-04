@@ -87,6 +87,46 @@ function redirectToDetails(result) {
   window.location.href = `of.html?${params.toString()}`;
 }
 
+
+function displayResults(list) {
+  const results = document.getElementById("searchResults");
+  clearMarkers();
+
+  if (!list.length) {
+    results.innerHTML = `
+    <div class="no-results">
+      <i class="fas fa-sad-tear" style="color:var(--brand);font-size:40px;"></i>
+      <p>No donations found</p>
+    </div>`;
+    return;
+  }
+
+  results.innerHTML = "";
+
+  list.forEach((d) => {
+    const div = document.createElement("div");
+    div.className = "result-item";
+    div.innerHTML = `
+    <h3>${d.foodName}</h3>
+    <div class="quantity">Quantity: ${d.quantity}</div>
+    <p>${d.foodNotes || "Fresh food available for pickup"}</p>
+    <div class="result-meta">
+      <span><i class="fas fa-utensils"></i> ${d.foodType}</span>
+      <span><i class="fas fa-clock"></i> Fresh until ${d.freshUptoTime}</span>
+      <span><i class="fas fa-map-marker-alt"></i> ${d.location}</span>
+      <span><i class="fas fa-phone"></i> ${d.phoneNumber}</span>
+    </div>`;
+
+    const marker = addMarker(d);
+    div.addEventListener("click", () => {
+      marker.openPopup();
+      map.panTo(marker.getLatLng());
+    });
+    results.appendChild(div);
+  });
+}
+
+
 // Add event listener for search button
 document.getElementById("searchButton").addEventListener("click", performSearch);
 
