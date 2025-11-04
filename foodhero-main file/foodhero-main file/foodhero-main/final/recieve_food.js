@@ -127,6 +127,22 @@ function displayResults(list) {
 }
 
 
+
+// Function to fetch all donations on page load
+async function fetchAllDonations() {
+  const resBox = document.getElementById("searchResults");
+  resBox.innerHTML = `<div style="text-align:center;padding:40px;color:var(--brand);"><i class="fas fa-spinner fa-spin"></i> Loading available donations...</div>`;
+
+  try {
+    const res = await fetch(`http://localhost:8080/get_donations`);
+    const data = await res.json();
+    displayResults(data.donations);
+  } catch (e) {
+    resBox.innerHTML = `<div style="text-align:center;padding:40px;color:red;">Error fetching data</div>`;
+    console.error(e);
+  }
+}
+
 // Add event listener for search button
 document.getElementById("searchButton").addEventListener("click", performSearch);
 
