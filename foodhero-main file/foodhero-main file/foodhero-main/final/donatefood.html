@@ -585,6 +585,13 @@
     timeInput.addEventListener('focus', function() {
       timeLabel.style.display = 'none';
     });
+
+    timeInput.addEventListener('blur', function() {
+      if (!this.value) {
+      timeLabel.style.display = 'block';
+      }
+    });
+
   </script>
 </body>
 </html>
