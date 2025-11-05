@@ -577,6 +577,14 @@
 
       window.location.href = 'home.html';
     });
+
+
+    // Handle time input label visibility
+    const timeInput = document.getElementById('freshUptoTime');
+
+    timeInput.addEventListener('focus', function() {
+      timeLabel.style.display = 'none';
+    });
   </script>
 </body>
 </html>
