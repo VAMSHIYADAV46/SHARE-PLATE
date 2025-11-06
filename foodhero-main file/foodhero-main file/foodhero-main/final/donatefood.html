@@ -540,14 +540,19 @@
     }
 
     function closeMap() {
-      document.getElementById('map-container').style.display = 'none';
-      var center = map.getCenter();
-      console.log('Coordinates:', center.lat, center.lng);
-
-      a = center.lat;
-      b = center.lng;
-      // You can replace "My Location" text with the location name in your UI here
-      document.querySelector('button[onclick="showMap()"]').innerText = 'Location: ' + center.lat + ', ' + center.lng;
+      const mapContainer = document.getElementById('map-container');
+      mapContainer.classList.remove('active');
+    
+      if (marker) {
+        const { lat, lng } = marker.getLatLng();
+        a = lat;
+        b = lng;
+        document.getElementById('location').value = `${a}, ${b}`;
+        document.querySelector('button[onclick="showMap()"]').innerText =
+          `Location: ${a.toFixed(3)}, ${b.toFixed(3)}`;
+      } else {
+        showNotification('Please select a location on the map first.', 'error');
+      }
     }
 
     document.getElementById('submitButton').addEventListener('click', async function(event) {
