@@ -23,6 +23,11 @@ async function getUsersCollection() {
     return db_connection.collection(collections.USERS);
 }
 
+async function getMessagesCollection() {
+    let db_connection = await connectToMongoDB();
+    return db_connection.collection(collections.MESSAGES);
+}
+
 module.exports = {
   getUsersCollection
 };
