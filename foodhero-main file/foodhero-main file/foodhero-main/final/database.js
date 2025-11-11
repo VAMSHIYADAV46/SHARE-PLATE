@@ -29,5 +29,6 @@ async function getMessagesCollection() {
 }
 
 module.exports = {
-  getUsersCollection
+  getUsersCollection,
+  getMessagesCollection
 };
