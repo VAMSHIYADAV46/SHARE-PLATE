@@ -28,6 +28,11 @@ async function getMessagesCollection() {
     return db_connection.collection(collections.MESSAGES);
 }
 
+async function getDonationsCollection() {
+    let db_connection = await connectToMongoDB();
+    return db_connection.collection(collections.DONATIONS);
+}
+
 module.exports = {
   getUsersCollection,
   getMessagesCollection
