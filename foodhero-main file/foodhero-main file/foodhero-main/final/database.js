@@ -35,5 +35,6 @@ async function getDonationsCollection() {
 
 module.exports = {
   getUsersCollection,
-  getMessagesCollection
+  getMessagesCollection,
+  getDonationsCollection
 };
