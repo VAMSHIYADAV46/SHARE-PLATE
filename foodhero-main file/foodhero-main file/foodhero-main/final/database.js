@@ -50,5 +50,6 @@ async function storeDonation(donation) {
 module.exports = {
   getUsersCollection,
   getMessagesCollection,
-  getDonationsCollection
+  getDonationsCollection,
+  storeDonation
 };
