@@ -33,6 +33,20 @@ async function getDonationsCollection() {
     return db_connection.collection(collections.DONATIONS);
 }
 
+async function storeDonation(donation) {
+    try {
+        const donationCollection = await getDonationsCollection();
+        const result = await donationCollection.insertOne(donation);
+        return {
+            success: result.acknowledged,
+            id: result.insertedId
+        };
+    } catch (error) {
+        console.log("Error storing the donation", error.message);
+        throw error;
+    }
+}
+
 module.exports = {
   getUsersCollection,
   getMessagesCollection,
