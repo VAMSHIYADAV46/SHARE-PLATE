@@ -47,6 +47,20 @@ async function storeDonation(donation) {
     }
 }
 
+
+
+async function fetchDonation(donation) {
+    try {
+        const collection = await getDonationsCollection();
+        const result = await collection.findOne(donation);
+        return result;
+    } catch (error) {
+        console.log("Error fetching the food items", error.message);
+        throw error;
+    }
+}
+
+
 module.exports = {
   getUsersCollection,
   getMessagesCollection,
