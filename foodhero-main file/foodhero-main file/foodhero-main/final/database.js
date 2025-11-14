@@ -65,5 +65,6 @@ module.exports = {
   getUsersCollection,
   getMessagesCollection,
   getDonationsCollection,
-  storeDonation
+  storeDonation,
+  fetchDonation
 };
