@@ -79,5 +79,6 @@ module.exports = {
   getMessagesCollection,
   getDonationsCollection,
   storeDonation,
-  fetchDonation
+  fetchDonation,
+  fetchDonationsByFoodName
 };
