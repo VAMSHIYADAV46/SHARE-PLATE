@@ -92,5 +92,6 @@ module.exports = {
   getDonationsCollection,
   storeDonation,
   fetchDonation,
-  fetchDonationsByFoodName
+  fetchDonationsByFoodName,
+  fetchAllDonations
 };
