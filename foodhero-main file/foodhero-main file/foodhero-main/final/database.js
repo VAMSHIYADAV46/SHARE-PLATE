@@ -74,6 +74,18 @@ async function fetchDonationsByFoodName(donation) {
     }
 }
 
+
+async function fetchAllDonations() {
+    try {
+        const collection = await getDonationsCollection();
+        const result = await collection.find({}).toArray();
+        return result;
+    } catch (error) {
+        console.log("Error fetching all food items", error.message);
+        throw error;
+    }
+}
+
 module.exports = {
   getUsersCollection,
   getMessagesCollection,
