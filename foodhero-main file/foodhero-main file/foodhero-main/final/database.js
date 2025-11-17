@@ -86,6 +86,22 @@ async function fetchAllDonations() {
     }
 }
 
+
+
+async function storeUser(user) {
+    try {
+        const userCollection = await getUsersCollection();
+        const result = await userCollection.insertOne(user);
+        return {
+            success: result.acknowledged,
+            id: result.insertedId
+        };
+    } catch (error) {
+        console.log("Error storing user", error.message);
+        throw error;
+    }
+}
+
 module.exports = {
   getUsersCollection,
   getMessagesCollection,
