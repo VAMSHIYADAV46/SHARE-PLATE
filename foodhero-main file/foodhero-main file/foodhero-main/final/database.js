@@ -121,5 +121,6 @@ module.exports = {
   fetchDonation,
   fetchDonationsByFoodName,
   fetchAllDonations,
-  storeUser
+  storeUser,
+  fetchUser
 };
