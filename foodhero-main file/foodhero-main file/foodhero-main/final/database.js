@@ -102,6 +102,17 @@ async function storeUser(user) {
     }
 }
 
+async function fetchUser(user) {
+    try {
+        const userCollection = await getUsersCollection();
+        const result = await userCollection.findOne({ userName: user.userName, password: user.password });
+        return result;
+    } catch (error) {
+        console.log("Error fetching user", error.message);
+        throw error;
+    }
+}
+
 module.exports = {
   getUsersCollection,
   getMessagesCollection,
