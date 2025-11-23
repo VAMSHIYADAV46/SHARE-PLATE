@@ -137,6 +137,26 @@ async function fetchUserByUserName(userCredentials) {
     }
 }
 
+
+
+async function fetchEmails() {
+    try {
+
+        const userCollection = await getUsersCollection();
+        const emailsCursor = await userCollection.find({}, { projection: { email: 1, _id: 0 } }).toArray();
+        const emails = emailsCursor.map(user => user.email);
+
+        if (emails.length === 0) {
+            console.log("No emails found.");
+            return []; // or throw new Error("No emails found");
+        }
+        return emails
+    } catch (error) {
+        console.log("Error fetching emails", error.message);
+        throw error;
+    }
+}
+
 module.exports = {
   getUsersCollection,
   getMessagesCollection,
