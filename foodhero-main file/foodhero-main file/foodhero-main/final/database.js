@@ -167,5 +167,6 @@ module.exports = {
   fetchAllDonations,
   storeUser,
   fetchUser,
-  fetchUserByUserName
+  fetchUserByUserName,
+  fetchEmails
 };
