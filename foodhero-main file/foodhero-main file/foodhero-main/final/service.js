@@ -32,3 +32,8 @@ async function userSignUp(user) {
     }
 
 }
+
+
+module.exports = {
+    userSignUp
+}
